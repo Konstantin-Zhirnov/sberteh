@@ -22,12 +22,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: 16,
   },
   tableContainer: {
-    maxHeight: '70vh',
+    maxHeight: '65vh',
     overflowY: 'auto',
     marginTop: 40,
-    // [theme.breakpoints.down('md')]: {
-    //   maxHeight: 'initial',
-    // },
   },
 }));
 

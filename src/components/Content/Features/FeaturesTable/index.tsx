@@ -30,7 +30,7 @@ const useStyles = makeStyles(() => ({
     marginRight: 10,
   },
   tableContainer: {
-    maxHeight: '64vh',
+    maxHeight: '57vh',
     overflowY: 'auto',
     marginTop: 40,
   },
