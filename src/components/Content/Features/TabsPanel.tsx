@@ -3,6 +3,9 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Divider, Theme } from '@material-ui/core';
 
+import { getLoaderFeatures } from '../../../store/documentsSlice';
+import { useAppSelector } from '../../../store/hooks';
+import Loader from '../../Loader';
 import Search from '../Search';
 import Size from '../Size';
 import { iProps } from './index';
@@ -24,6 +27,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.down('xs')]: {
       flexDirection: 'column',
     },
+  },
+  loaderContainer: {
+    height: 5,
+    minHeight: 5,
   },
 }));
 
@@ -57,6 +64,7 @@ function a11yProps(index: any) {
 
 const TabsPanel: React.FC<iProps> = React.memo(({ containerWidth, setContainerWidth }) => {
   const classes = useStyles();
+  const loaderFeatures = useAppSelector(getLoaderFeatures);
   const [value, setValue] = React.useState(0);
 
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -80,6 +88,7 @@ const TabsPanel: React.FC<iProps> = React.memo(({ containerWidth, setContainerWi
         <Settings />
       </div>
       <Divider />
+      <div className={classes.loaderContainer}>{loaderFeatures && <Loader />}</div>
       <TabPanel value={value} index={0}>
         <FeaturesTable />
       </TabPanel>

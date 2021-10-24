@@ -84,6 +84,8 @@ const initialState: IState = {
   searchTextDocuments: '',
   searchTextFeatures: '',
   newTitleForFeatures: { id: null, text: '' },
+  loaderDocuments: false,
+  loaderFeatures: false,
   status: null,
   error: null,
 };
@@ -106,39 +108,46 @@ export const documentsSlice = createSlice({
     setNewTitleForFeatures: (state, action) => {
       state.newTitleForFeatures = action.payload;
     },
+    setLoaderDocuments: (state, action) => {
+      state.loaderDocuments = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchDocuments.pending, pending)
+      .addCase(fetchDocuments.pending, pendingDocuments)
       .addCase(fetchDocuments.fulfilled, (state, action) => {
         state.status = 'resolved';
         state.documents = action.payload;
+        state.loaderDocuments = false;
       })
       .addCase(fetchDocuments.rejected, (state, action) => {
         state.status = 'rejected';
         state.error = action.error.message ?? '';
       })
-      .addCase(fetchSecondDocuments.pending, pending)
+      .addCase(fetchSecondDocuments.pending, pendingDocuments)
       .addCase(fetchSecondDocuments.fulfilled, (state, action) => {
         state.status = 'resolved';
         state.secondDocuments = action.payload;
+        state.loaderDocuments = false;
       })
       .addCase(fetchSecondDocuments.rejected, (state, action) => {
         state.status = 'rejected';
         state.error = action.error.message ?? '';
       })
-      .addCase(fetchFeatures.pending, pending)
+      .addCase(fetchFeatures.pending, pendingFeatures)
       .addCase(fetchFeatures.fulfilled, (state, action) => {
         state.status = 'resolved';
         state.features = action.payload;
+        state.loaderFeatures = false;
       })
       .addCase(fetchFeatures.rejected, (state, action) => {
         state.status = 'rejected';
         state.error = action.error.message ?? '';
       })
-      .addCase(fetchPatchFeatures.pending, pending)
+      .addCase(fetchPatchFeatures.pending, pendingFeatures)
       .addCase(fetchPatchFeatures.fulfilled, (state) => {
         state.status = 'resolved';
+        state.loaderFeatures = false;
       })
       .addCase(fetchPatchFeatures.rejected, (state, action) => {
         state.status = 'rejected';
@@ -147,12 +156,24 @@ export const documentsSlice = createSlice({
   },
 });
 
-function pending(state: IState) {
+function pendingDocuments(state: IState) {
   state.status = 'loading';
+  state.loaderDocuments = true;
   state.error = null;
 }
 
-export const { setSearchText, patchFeatures, setNewTitleForFeatures } = documentsSlice.actions;
+function pendingFeatures(state: IState) {
+  state.status = 'loading';
+  state.loaderFeatures = true;
+  state.error = null;
+}
+
+export const {
+  setSearchText,
+  patchFeatures,
+  setNewTitleForFeatures,
+  setLoaderDocuments,
+} = documentsSlice.actions;
 
 export const getDocuments = (state: RootState): IDocuments[] => state.documents.documents;
 export const getSecondDocuments = (state: RootState): ISecondDocuments[] =>
@@ -167,5 +188,7 @@ export const getSearchTextFeatures = (state: RootState): string | '' =>
   state.documents.searchTextFeatures;
 export const getNewTitleForFeatures = (state: RootState): ITitleForFeatures =>
   state.documents.newTitleForFeatures;
+export const getLoaderDocuments = (state: RootState): boolean => state.documents.loaderDocuments;
+export const getLoaderFeatures = (state: RootState): boolean => state.documents.loaderFeatures;
 
 export default documentsSlice.reducer;

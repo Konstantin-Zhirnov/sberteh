@@ -5,6 +5,8 @@ export interface IState {
   searchTextDocuments: string | '';
   searchTextFeatures: string | '';
   newTitleForFeatures: ITitleForFeatures;
+  loaderDocuments: boolean;
+  loaderFeatures: boolean;
   status: null | string;
   error: null | string;
 }
